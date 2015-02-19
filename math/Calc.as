@@ -308,6 +308,8 @@ package src.as3.math
 		 * 
 		 * @param p The point to be checked.
 		 * @param m The movie clip to be checked (its rectangle).
+		 * @param stageW The stage width.
+		 * @param stageH The stage height.
 		 * 
 		 * +--------------+---+----------------+
 		 * |              |   |                |
@@ -359,7 +361,7 @@ package src.as3.math
 		 * and ORI_C is returned.
 		 * 
 		 */
-		public static function pointOrientationRect(p:Point, m:MovieClip) : Number
+		public static function pointOrientationRect(p:Point, m:MovieClip, stageW:Number, stageH:Number) : Number
 		{
 			var Pa = new Point(m.x, m.y);
 			var Pb = new Point(m.x + m.width, m.y);
@@ -398,7 +400,7 @@ package src.as3.math
 				if (p.y <= Pb.y)
 				{
 					// Give preference to the bottom part.
-					if (point_in_triangle(p.x, p.y, Pb.x, Pb.y, Pb.x, 0, Const.STAGE_WIDTH, 0) != true)
+					if (point_in_triangle(p.x, p.y, Pb.x, Pb.y, Pb.x, 0, stageW, 0) != true)
 					{
 						return ORI_NEB;
 					}
@@ -409,7 +411,7 @@ package src.as3.math
 				}
 				// Southeast.
 				else if (p.y >= Pd.y) {
-					if (point_in_triangle(p.x, p.y, Pd.x, Pd.y, Const.STAGE_WIDTH, Pd.y, Const.STAGE_WIDTH, Const.STAGE_HEIGHT))
+					if (point_in_triangle(p.x, p.y, Pd.x, Pd.y, stageW, Pd.y, stageW, stageH))
 					{
 						return ORI_SEA;
 					}
@@ -439,7 +441,7 @@ package src.as3.math
 				// Southwest.
 				else if (p.y >= Pc.y)
 				{
-					if (point_in_triangle(p.x, p.y, Pc.x, Pc.y, 0, Pc.y, 0, Const.STAGE_HEIGHT))
+					if (point_in_triangle(p.x, p.y, Pc.x, Pc.y, 0, Pc.y, 0, stageH))
 					{
 						return ORI_SOA;
 					}
