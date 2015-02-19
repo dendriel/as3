@@ -1,4 +1,4 @@
-package src 
+package src.as3.math 
 {
 	import flash.display.MovieClip;
 	import flash.geom.Matrix;
