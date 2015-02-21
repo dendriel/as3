@@ -603,6 +603,29 @@ package src.as3.math
 
 			return ( (alpha > 0) && (beta >0) && (gamma > 0) );
 		}
+		
+		/**
+		 * 
+		 * @param	pos	Position in pixel
+		 * @param	tile_size Size of the tile.
+		 * @return	The pixel position in the matrix.
+		 */
+		public static function pixel_to_tile(pos:int, tile_size:int) : int
+		{
+			return (pos / tile_size);
+		}
+		
+		/**
+		 * @brief Find the array position from matrix coordinates.
+		 * @param px The view (column) index.
+		 * @param py The position (row) index.
+		 * @param mwidth The width of the matrix
+		 * @return The array position.
+		*/
+		public static function coor_to_idx(px:int, py:int, mwidth:int)
+		{
+			return ((py * mwidth) + px );
+		}
 	}
 
 }
