@@ -14,13 +14,13 @@ package src.as3.ui
 	 */
 	public class GameButton extends MovieClip
 	{
-		private var textValue:String;
+		private var _textValue:String;
 		private var button:SimpleButton;
 		private var textField:TextField;
 		
-		public function GameButton(textValue:String, px:Number = 0, py:Number = 0)
+		public function GameButton(textValue:String = "", px:Number = 0, py:Number = 0)
 		{
-			this.textValue = textValue;
+			_textValue = textValue;
 			x = px;
 			y = py;
 			
@@ -53,7 +53,7 @@ package src.as3.ui
 			textField.defaultTextFormat = format;
 			textField.textColor = 0xffffff;
 			textField.y = 3;
-			textField.text = textValue;
+			textField.text = _textValue;
 			textField.width = buttonSprite.width;
 			textField.selectable = false;
 			textField.mouseEnabled = false;
@@ -63,6 +63,12 @@ package src.as3.ui
 			this.addChild(button);
 			this.addChild(textField);
 		}		
+		
+		public function set textValue(value:String):void 
+		{
+			_textValue = value;
+			textField.text = _textValue;
+		}
 	}
 
 }
