@@ -619,13 +619,68 @@ package src.as3.math
 		 * @brief Find the array position from matrix coordinates.
 		 * @param px The view (column) index.
 		 * @param py The position (row) index.
-		 * @param mwidth The width of the matrix
+		 * @param mwidth The width of the matrix.
 		 * @return The array position.
+		 * 
+		 * Example:
+		 * 
+		 * The matrix:
+		 * 
+		 * +-----------+
+		 * | 0 | 1 | 2 | 
+		 * |-----------+
+		 * | 3 | 4 | 5 |
+		 * |-----------+
+		 * | 6 | 7 | 8 |
+		 * |-----------+ 
+		 * 
+		 * mwidth = 3
+		 * 
+		 * idx = coor (px, py)
+		 * 0 = 0,0
+		 * 1 = 0,1
+		 * 2 = 0,2
+		 * 3 = 1,0
+		 * 4 = 1,1
+		 * 5 = 1,2
+		 * 6 = 2,0
+		 * 7 = 2,1
+		 * 8 = 2,2
+		 * 
+		 *  coor_to_idx( 1, 0, 3) = 3
+		 * 
 		*/
-		public static function coor_to_idx(px:int, py:int, mwidth:int)
+		public static function coor_to_idx(px:int, py:int, mwidth:int) : int
 		{
 			return ((py * mwidth) + px );
 		}
+		
+		/**
+		 * @brief Find index in matrix from pixel position. (recall pixel_to_tile and coor_to_idx)
+		 * @param	px Horizontal position in pixel
+		 * @param	py Vertical position in pixel
+		 * @param	tile_size Size of the tile.
+		 * @param	mwidthThe width of the matrix.
+		 * @return The array position.
+		 */
+		public static function pixel_to_idx(px:int, py:int, tile_size:int, mwidth:int) : int
+		{
+			return coor_to_idx(pixel_to_tile(px, tile_size), pixel_to_tile(py, tile_size), mwidth);
+		}
+		
+		/**
+		 * 
+		 * @param	idx The position of the element in array representation.
+		 * @param	mwidth The matrix width.
+		 * @return  A point with the x and y coordinates.
+		 */
+		public static function idx_to_coor(idx:int, mwidth:int) : Point
+		{
+			var p:Point = new Point;
+			p.x = (idx % mwidth);
+			p.y = ( ( (idx - p.x) / mwidth) );
+			
+			return p;
+		}
 	}
-
 }
