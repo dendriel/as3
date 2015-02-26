@@ -1,4 +1,4 @@
-package  
+package  src.as3.math.graph
 {
 	/**
 	 * ...

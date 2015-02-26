@@ -1,4 +1,4 @@
-package  
+package  src.as3.math.graph
 {
 	/**
 	 * ...
@@ -6,23 +6,23 @@ package
 	 */
 	public class SPFNodeLink 
 	{
-		private var _weightTo:int;
+		private var _weightTo:Number;
 		private var _node:SPFNode;
 		private var _nodeFrom:SPFNode;
 		
-		public function SPFNodeLink(node:SPFNode, nodeFrom:SPFNode, weightTo:int) 
+		public function SPFNodeLink(node:SPFNode, nodeFrom:SPFNode, weightTo:Number) 
 		{
 			_node = node;
 			_nodeFrom = nodeFrom;
 			_weightTo = weightTo;
 		}
 		
-		public function get weightTo():int 
+		public function get weightTo():Number 
 		{
 			return _weightTo;
 		}
 		
-		public function set weightTo(value:int):void 
+		public function set weightTo(value:Number):void 
 		{
 			_weightTo = value;
 		}

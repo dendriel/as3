@@ -1,6 +1,5 @@
-package
+package src.as3.math.graph
 {
-	
 	/**
 	 * ...
 	 * @author Vitor Rozsa
@@ -71,7 +70,7 @@ package
 			}
 		}
 		
-		public function findSPF(from:int, to:int) : Array
+		public function findSPF(from:int, to:int) : Vector.<SPFNode>
 		{
 			var graph:Array = _graph.concat();
 			var openList:Vector.<SPFNodeLink> = new Vector.<SPFNodeLink>;
@@ -117,9 +116,9 @@ package
 			return makeArrayFromClosedList(from, to, closedList);
 		}
 		
-		private function makeArrayFromClosedList(from:int, to:int, list:Vector.<SPFNodeLink>) : Array
+		private function makeArrayFromClosedList(from:int, to:int, list:Vector.<SPFNodeLink>) : Vector.<SPFNode>
 		{
-			var nodesList:Array = new Array;
+			var nodesList:Vector.<SPFNode> = new Vector.<SPFNode>;
 			var nodeLink:SPFNodeLink;
 			
 			// Find destination;
@@ -141,7 +140,7 @@ package
 					break;
 				}
 			}
-
+			
 			return nodesList;
 		}
 		
