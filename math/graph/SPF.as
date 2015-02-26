@@ -4,6 +4,39 @@ package
 	/**
 	 * ...
 	 * @author Vitor Rozsa
+	 * 
+	 * WARNING:
+		 * 
+		 * The graph is a vector composed by SPFNode(s). Each node has its own weight and a list
+		 * of neighbors. The SPFNode doesn't have any explicit link (edge). Any link to the given node
+		 * have the same weight as it have. The SPF algorithm will build up the links and process
+		 * of the vector list of SPFNodes.
+		 * 
+		 * *With this configuration, all the graphs are multidirectional.
+		 * 
+		 * For example:
+		 * 
+		 * A:
+			 * weight: 2
+			 * neighbors: B and C
+		 *
+		 * B: 
+			 * weight: 1
+			 * neighbors: A
+		 *
+		 * C:
+			 * weight: 3
+			 * neighbors: A
+		 * 
+		 * 
+		 *     |<---2---|
+		 *   A |----1-->|B
+	 *      ^ |
+	 *      2 3
+	 *      | |
+	 *      | \/
+	 *       C
+	 * 
 	 */
 	public class SPF
 	{
@@ -38,16 +71,16 @@ package
 			}
 		}
 		
-		public function findSPF(from:int, to:int) : void
+		public function findSPF(from:int, to:int) : Array
 		{
 			var graph:Array = _graph.concat();
 			var openList:Vector.<SPFNodeLink> = new Vector.<SPFNodeLink>;
 			var closedList:Vector.<SPFNodeLink> = new Vector.<SPFNodeLink>;
-			
+			var destinationReached:Boolean = false;
 			var fromNodeLink:SPFNodeLink = new SPFNodeLink(graph[from], null, 0);
 			var toNode:SPFNode = graph[to];
 			
-			trace("Find SPF from node " + fromNodeLink.node.uid + " to node " + toNode.uid);
+			//trace("Find SPF from node " + fromNodeLink.node.uid + " to node " + toNode.uid);
 			
 			closedList.push(fromNodeLink);
 			
@@ -56,25 +89,80 @@ package
 			while ( openList.length > 0)
 			{
 				var leastCostLink:SPFNodeLink = getLeastCostLink(openList, closedList);
-				trace("\n#############\nleastCostLink: " + leastCostLink.node.uid +
-				" nodeFrom: " + ( (leastCostLink.nodeFrom != null)? leastCostLink.nodeFrom.uid : "null") + " weight: " + leastCostLink.weightTo);
-				for each (var node:SPFNode in leastCostLink.node.neighborList)
-				{
-					trace("Node " + node.uid + " is inside node " + leastCostLink.node.uid);
-				}
 			
 				// Add the element into the closed list.
 				closedList.push(leastCostLink);
 				
+				if (leastCostLink.node.uid == toNode.uid)
+				{
+					destinationReached = true;
+					break;
+				}
+				
 				updateOpenList(leastCostLink, openList, closedList);
 			}
 			
-			trace("Closed list:");
+			if ( destinationReached != true)
+			{
+				return null;
+			}
+			
+			/*trace("Closed list:");
 			for each (var nodeLink:SPFNodeLink in closedList)
 			{
 				trace("node: " + nodeLink.node.uid +
 				" nodeFrom: " + ( (nodeLink.nodeFrom != null)? nodeLink.nodeFrom.uid : "null") + " weight: " + nodeLink.weightTo);
+			}*/
+			
+			return makeArrayFromClosedList(from, to, closedList);
+		}
+		
+		private function makeArrayFromClosedList(from:int, to:int, list:Vector.<SPFNodeLink>) : Array
+		{
+			var nodesList:Array = new Array;
+			var nodeLink:SPFNodeLink;
+			
+			// Find destination;
+			nodeLink = getNodeLinkOnList(to, list);
+			
+			// Add last node in the list.
+			nodesList.push(nodeLink.node);
+			
+			// Find all nodes until "from" node.
+			while (true)
+			{
+				nodeLink = getNodeLinkOnList(nodeLink.nodeFrom.uid, list);
+				nodesList.push(nodeLink.node);
+				
+				// If found origin or there is no more nodes to go back.
+				
+				if ( (nodeLink.node.uid == from) || (nodeLink.nodeFrom == null) )
+				{
+					break;
+				}
 			}
+
+			return nodesList;
+		}
+		
+		/**
+		 * Find the link for the given node.
+		 * @param	uid
+		 * @param	list
+		 * @return
+		 */
+		private function getNodeLinkOnList(uid:int, list:Vector.<SPFNodeLink>) : SPFNodeLink
+		{
+			// Find destination.
+			for each (var nodeLink:SPFNodeLink in list)
+			{
+				if (nodeLink.node.uid == uid)
+				{
+					return nodeLink;
+				}
+			}
+			
+			return null;
 		}
 		
 		/**
@@ -122,24 +210,9 @@ package
 			var neighborFound:Boolean = false;
 			var link:SPFNodeLink;
 			
-			trace("\nupdate neighbors from node " + nodeLink.node.uid);
-			for each (var node:SPFNode in nodeLink.node.neighborList)
-			{
-				trace("Node " + node.uid + " is inside node " + nodeLink.node.uid);
-			}
-			
-			trace("open list before:");
-			for each (var nodeLink2:SPFNodeLink in openList)
-			{
-				trace("node: " + nodeLink2.node.uid +
-				" nodeFrom: " + ( (nodeLink2.nodeFrom != null)? nodeLink2.nodeFrom.uid : "null") + " weight: " + nodeLink2.weightTo);
-			}
-			
 			// For each neighbor.
 			for each (var neighbor:SPFNode in nodeLink.node.neighborList)
 			{
-				trace("\nNode " + neighbor.uid + " is inside node " + nodeLink.node.uid);
-				trace("Checking neighbor " + neighbor.uid);
 //#1 START +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 				// Check if neighbor is already in the closed list.
 				for each (link in closedList)
@@ -156,7 +229,6 @@ package
 				// If neighbor already in closed list.
 				if (neighborFound)
 				{
-					trace("neighbor found on closed list " + neighbor.uid);
 					continue;
 				}
 //#1 END +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -173,9 +245,6 @@ package
 					neighborFound = true;
 					
 					// If the node weight of the node in the list is higher than the new one.
-					trace("neighbor found in the open list.\ncurr weight: " + link.weightTo);
-					trace("nodeLink weight: " + nodeLink.weightTo);
-					trace("neighbor weight: " + neighbor.weight);
 					if (link.weightTo > (nodeLink.weightTo + neighbor.weight) )
 					{
 						link.weightTo = (nodeLink.weightTo + neighbor.weight);
@@ -193,14 +262,6 @@ package
 				
 				// Add neightbor in the open list.
 				openList.push(new SPFNodeLink(neighbor, nodeLink.node, nodeLink.weightTo + neighbor.weight))
-			}
-			
-			
-			trace("open list after:");
-			for each (var nodeLink2:SPFNodeLink in openList)
-			{
-				trace("node: " + nodeLink2.node.uid +
-				" nodeFrom: " + ( (nodeLink2.nodeFrom != null)? nodeLink2.nodeFrom.uid : "null") + " weight: " + nodeLink2.weightTo);
 			}
 		}
 	}
