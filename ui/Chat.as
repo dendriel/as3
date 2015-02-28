@@ -203,7 +203,7 @@ package as3.ui
 			if ( (processInternalCommand(inputTxt.text) != true) &&
 					(processUserCommand(inputTxt.text) != true) )
 			{
-				this.text = inputTxt.text;
+				addText(inputTxt.text);
 			}
 			
 			lastUserInput = inputTxt.text;
@@ -304,17 +304,10 @@ package as3.ui
 			
 			if (display)
 			{
-				this.text = inputTxt.text;
+				addText(inputTxt.text);
 			}
 			
 			return found;
-		}
-		
-		private function set text(value:String) : void
-		{
-			boxTxt.text = boxTxt.text.concat( (boxTxt.length > 0? "\r" : "") + value);
-			boxTxt.scrollV = boxTxt.text.split('\r').length;
-			dispatchEvent(new ChatInputEvent(value));
 		}
 		
 //##################################################################################################
@@ -332,9 +325,14 @@ package as3.ui
 			drawText();
 		}
 		
-		public function addText(value:String) : void
+		public function addText(value:String, userInput:Boolean=true) : void
 		{
-			text = value;
+			boxTxt.text = boxTxt.text.concat( (boxTxt.length > 0? "\r" : "") + value);
+			boxTxt.scrollV = boxTxt.text.split('\r').length;
+			if (userInput)
+			{
+				dispatchEvent(new ChatInputEvent(value));
+			}
 		}
 		
 		/**
