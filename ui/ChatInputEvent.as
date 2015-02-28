@@ -1,4 +1,4 @@
-package as3.ui
+package src.as3.ui
 {
 	import flash.events.Event;
 	
