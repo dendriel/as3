@@ -682,5 +682,18 @@ package src.as3.math
 			
 			return p;
 		}
+		
+//###########################################
+// Dice utilities.
+		public static function roll_d6(times:int=1) : int
+		{
+			var result:int = 0;
+			for (var i:int = 0; i < times; i++)
+			{
+				result += randomRange(1, 6);
+			}
+			
+			return result;
+		}
 	}
 }
