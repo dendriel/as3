@@ -683,6 +683,38 @@ package src.as3.math
 			return p;
 		}
 		
+		/**
+		 * 
+		 * @param	idx The position of the element in array representation.
+		 * @param	mwidth The matrix width.
+		 * @param	tile_size Size of the tile.
+		 * @return  A point with the x and y coordinates in pixels.
+		 */
+		public static function idx_to_pixel(idx:int, mwidth:int, tile_size:int) : Point
+		{
+			var p:Point = idx_to_coor(idx, mwidth);
+			p.x *= tile_size;
+			p.y *= tile_size;
+			
+			return p;
+		}
+		
+		/**
+		 * Converts bidimensional arrays into unidimensional ones.
+		 * @param	bi
+		 * @return A new array with the result.
+		 */
+		public static function biToUniArray(bi:Array) : Array
+		{
+			var uni:Array = new Array();
+			for (var i in bi)
+			{
+				uni = uni.concat(bi[i]);
+			}
+			
+			return uni;
+		}
+		
 //###########################################
 // Dice utilities.
 		public static function roll_d6(times:int=1) : int
