@@ -76,7 +76,7 @@ package src.as3.ui
 		private var boxBg:Shape;
 		private var boxHeight:int;
 		
-		private var inputTxt:TextField;
+		private var _inputTxt:TextField;
 		private var inputBg:Shape;
 		private var inputPosY:int;
 		private var inputHeight:int;
@@ -98,7 +98,7 @@ package src.as3.ui
 			boxBg = new Shape();
 			inputBg = new Shape();
 			boxTxt = new TextField();
-			inputTxt = new TextField();
+			_inputTxt = new TextField();
 			format = new TextFormat();
 			lastUserInput = "";
 			
@@ -109,7 +109,7 @@ package src.as3.ui
 			addChild(boxBg);
 			addChild(inputBg);
 			addChild(boxTxt);
-			addChild(inputTxt);
+			addChild(_inputTxt);
 			
 			this.enable = true;
 		}
@@ -165,33 +165,33 @@ package src.as3.ui
 			//boxTxt.text = "";
 			
 			// Create input box.
-			inputTxt.x = inputBg.x;
-			inputTxt.y = inputBg.y;
-			inputTxt.width = inputBg.width;
-			inputTxt.height = inputBg.height;
-			inputTxt.textColor = _textColor;
-			inputTxt.type = TextFieldType.INPUT;
-			inputTxt.defaultTextFormat = format;
-			inputTxt.multiline = false;
+			_inputTxt.x = inputBg.x;
+			_inputTxt.y = inputBg.y;
+			_inputTxt.width = inputBg.width;
+			_inputTxt.height = inputBg.height;
+			_inputTxt.textColor = _textColor;
+			_inputTxt.type = TextFieldType.INPUT;
+			_inputTxt.defaultTextFormat = format;
+			_inputTxt.multiline = false;
 			// "- 1" to avoid scrolling the input field.
-			inputTxt.maxChars = inputTxt.width / (int(format.size) / 2) - 1;
+			_inputTxt.maxChars = _inputTxt.width / (int(format.size) / 2) - 1;
 		}
 		
 		private function handleTextInput(e:KeyboardEvent) : void
 		{
 			if (e.keyCode == Keyboard.UP)
 			{
-				inputTxt.text = lastUserInput;
+				_inputTxt.text = lastUserInput;
 				return;
 			}
 			else if (e.keyCode == Keyboard.DOWN)
 			{
-				if (inputTxt.length > 0)
+				if (_inputTxt.length > 0)
 				{
-					lastUserInput = inputTxt.text
+					lastUserInput = _inputTxt.text
 				}
 				
-				inputTxt.text = "";
+				_inputTxt.text = "";
 				return;
 			}
 			
@@ -200,14 +200,14 @@ package src.as3.ui
 				return;
 			}
 			
-			if ( (processInternalCommand(inputTxt.text) != true) &&
-					(processUserCommand(inputTxt.text) != true) )
+			if ( (processInternalCommand(_inputTxt.text) != true) &&
+					(processUserCommand(_inputTxt.text) != true) )
 			{
-				addText(inputTxt.text);
+				addText(_inputTxt.text);
 			}
 			
-			lastUserInput = inputTxt.text;
-			inputTxt.text = "";
+			lastUserInput = _inputTxt.text;
+			_inputTxt.text = "";
 		}
 		
 		/**
@@ -304,7 +304,7 @@ package src.as3.ui
 			
 			if (display)
 			{
-				addText(inputTxt.text);
+				addText(_inputTxt.text);
 			}
 			
 			return found;
@@ -343,11 +343,11 @@ package src.as3.ui
 		{
 			if (value)
 			{
-				inputTxt.addEventListener(KeyboardEvent.KEY_DOWN, handleTextInput, false, 0, true);
+				_inputTxt.addEventListener(KeyboardEvent.KEY_DOWN, handleTextInput, false, 0, true);
 			}
 			else
 			{
-				inputTxt.removeEventListener(KeyboardEvent.KEY_DOWN, handleTextInput); 
+				_inputTxt.removeEventListener(KeyboardEvent.KEY_DOWN, handleTextInput); 
 			}
 		}
 		
@@ -365,6 +365,16 @@ package src.as3.ui
 		public function registerCallback(command:String, callback:Function, displayInChat:Boolean=false) : void
 		{
 			userCommands.push([command, callback, displayInChat]);
+		}
+		
+		public function get inputTxt() : TextField
+		{
+			return _inputTxt;
+		}
+		
+		public function clearInputField() : void
+		{
+			_inputTxt.text = "";
 		}
 	}	
 }
