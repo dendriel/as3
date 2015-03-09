@@ -715,6 +715,18 @@ package src.as3.math
 			return uni;
 		}
 		
+		/**
+		 * Calculate the percentage from a value.
+		 * @param	amount
+		 * @param	percentage
+		 * @return
+		 */
+		public static function percentage(amount:Number, percentage:int) : Number
+		{
+			var x = amount / 100;
+			return x * percentage;
+		}
+		
 //###########################################
 // Dice utilities.
 		public static function roll_d6(times:int=1) : int
