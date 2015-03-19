@@ -678,6 +678,7 @@ package src.as3.math
 		{
 			var p:Point = new Point;
 			p.x = (idx % mwidth);
+			// Improvement: p.y = Math.floor(idx / mwidth);
 			p.y = ( ( (idx - p.x) / mwidth) );
 			
 			return p;
